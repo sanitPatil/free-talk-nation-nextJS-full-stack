@@ -25,16 +25,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable}  bg-black`}>
         <Navbar />
         <main>{children}</main>
-        <footer className="absolute w-full bottom-0 p-1 bg-gray-900">
+        <div className="absolute w-full bottom-0 p-1 bg-gray-900">
           <div className="text-white text-center font-semibold ">
-            © {new Date().getFullYear()} FreetalkX™. All rights reserved.
+            © {new Date().getFullYear()} FreeTalkX™. All rights reserved.
           </div>
-        </footer>
+        </div>
       </body>
     </html>
   );

@@ -5,9 +5,9 @@ export interface User extends Document {
   username: string;
   email: string;
   password: string;
-  bio: string;
-  profileImage: string;
-  coverImage: string;
+  bio?: string;
+  profileImage?: string;
+  coverImage?: string;
 }
 
 const UserSchema: Schema<User> = new Schema(
