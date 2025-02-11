@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import AuthProvider from "@/AuthContext/AuthProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,15 +26,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}  bg-black`}>
-        <Navbar />
-        <main>{children}</main>
-        <div className="absolute w-full bottom-0 p-1 bg-gray-900">
-          <div className="text-white text-center font-semibold ">
-            © {new Date().getFullYear()} FreeTalkX™. All rights reserved.
-          </div>
-        </div>
-      </body>
+      <AuthProvider>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable}  bg-black`}
+        >
+          <Navbar />
+          <main>{children}</main>
+          <div className="absolute w-full bottom-0 p-1 bg-gray-900">
+            <div className="text-white text-center font-semibold ">
+              © {new Date().getFullYear()} FreeTalkX™. All rights reserved.
+            </div>
+          </div>{" "}
+        </body>
+      </AuthProvider>
     </html>
   );
 }

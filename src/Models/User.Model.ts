@@ -8,6 +8,7 @@ export interface User extends Document {
   bio?: string;
   profileImage?: string;
   coverImage?: string;
+  validatePassword: (password: string) => boolean;
 }
 
 const UserSchema: Schema<User> = new Schema(
@@ -57,12 +58,16 @@ UserSchema.pre<User>(
     try {
       this.password = await bcrypt.hash(this.password, 10);
       next();
-    } catch (error) {
+    } catch (error: any) {
       console.log("error 61: ", error);
-      next(error as CallbackError);
+      next(error);
     }
   }
 );
+
+UserSchema.methods.validatePassword = async function (password: string) {
+  return await bcrypt.compare(password, this.password);
+};
 const userModel =
   (mongoose.models.User as mongoose.Model<User>) ||
   mongoose.model<User>("User", UserSchema);
