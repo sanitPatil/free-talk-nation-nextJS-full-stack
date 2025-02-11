@@ -10,7 +10,7 @@ export interface User extends Document {
   coverImage: string;
 }
 
-const UserSchema: Schema<User> = new Schema<User>(
+const UserSchema: Schema<User> = new Schema(
   {
     username: {
       type: String,
@@ -26,6 +26,10 @@ const UserSchema: Schema<User> = new Schema<User>(
       unique: [true, "username must be unique!"],
       lowercase: true,
       trim: true,
+      match: [
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+        "please provide valid email address",
+      ],
     },
     password: {
       type: String,
@@ -54,13 +58,13 @@ UserSchema.pre<User>(
       this.password = await bcrypt.hash(this.password, 10);
       next();
     } catch (error) {
-      console.log("error 56: ", error);
+      console.log("error 61: ", error);
       next(error as CallbackError);
     }
   }
 );
 const userModel =
   (mongoose.models.User as mongoose.Model<User>) ||
-  mongoose.model<User>("userModel", UserSchema);
+  mongoose.model<User>("User", UserSchema);
 
 export default userModel;
