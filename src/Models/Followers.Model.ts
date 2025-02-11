@@ -1,19 +1,19 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document, Types } from "mongoose";
 
 export interface Follow extends Document {
-  followed_by: mongoose.Schema.Types.ObjectId;
-  followed_to: mongoose.Schema.Types.ObjectId;
+  followed_by: Types.ObjectId;
+  followed_to: Types.ObjectId;
 }
 
 const followSchema: Schema<Follow> = new Schema(
   {
     followed_by: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
     followed_to: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },

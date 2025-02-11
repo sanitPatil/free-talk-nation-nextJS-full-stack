@@ -1,7 +1,7 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document, Types } from "mongoose";
 
 export interface Post extends Document {
-  onwer: mongoose.Types.ObjectId;
+  onwer: Types.ObjectId;
   title: string;
   description: string;
   // tags : id ->string
@@ -10,7 +10,7 @@ export interface Post extends Document {
 const PostSchema: Schema<Post> = new Schema(
   {
     onwer: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
@@ -30,6 +30,6 @@ const PostSchema: Schema<Post> = new Schema(
 
 const postModel =
   (mongoose.models.Post as mongoose.Model<Post>) ||
-  mongoose.model("Post", PostSchema);
+  mongoose.model<Post>("Post", PostSchema);
 
 export default postModel;
