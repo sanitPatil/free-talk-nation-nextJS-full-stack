@@ -1,0 +1,33 @@
+import { X } from "lucide-react";
+import Link from "next/link";
+import React from "react";
+
+function Navbar() {
+  return (
+    <nav className="flex justify-between p-1 bg-gray-900 text-white">
+      <div className="max-w-7xl mx-auto px-4 text-4xl font-bold rounded-full p-2 bg-transparent  ">
+        <div className="">
+          <Link href={"/"}>
+            Free-Talk
+            <sub>
+              <X className="w-4 h-4 inline" />
+            </sub>
+          </Link>
+        </div>
+      </div>
+      <div className="">
+        <ul className="flex gap-4 p-4 rounded-full text-xl font-bold">
+          <li className="hover:border-b-2">
+            <Link href={"/sign-in"}>Sign in</Link>
+          </li>
+          <li className="hover:border-b-2">
+            <Link href={"/sign-up"}>Sign up</Link>
+          </li>
+        </ul>
+      </div>
+      <div></div>
+    </nav>
+  );
+}
+
+export default Navbar;

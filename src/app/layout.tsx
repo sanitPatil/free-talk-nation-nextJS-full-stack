@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Navbar from "@/components/Navbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,7 +28,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <Navbar />
+        <main>{children}</main>
+        <footer className="absolute w-full bottom-0 p-1 bg-gray-900">
+          <div className="text-white text-center font-semibold ">
+            © {new Date().getFullYear()} FreetalkX™. All rights reserved.
+          </div>
+        </footer>
       </body>
     </html>
   );
