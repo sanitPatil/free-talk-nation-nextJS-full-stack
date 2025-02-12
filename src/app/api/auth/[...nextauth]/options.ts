@@ -26,21 +26,21 @@ export const authOptions: NextAuthOptions = {
           });
 
           if (!user) {
-            throw new Error(
+            return new Error(
               `user with given credential not found please login`
             );
           }
 
-          const isPasswordValid: boolean = await user.validatePassword(
+          const isPasswordValid: boolean = user.validatePassword(
             credentials.password
           );
 
-          if (!isPasswordValid) throw new Error("In-valid credentials");
+          if (!isPasswordValid) return new Error("In-valid credentials");
 
           return user;
         } catch (error: any) {
           console.error(`AUTH OPTION: ${error}`);
-          throw new Error(error);
+          return new Error(error);
         }
       },
     }),

@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import AuthProvider from "@/AuthContext/AuthProvider";
-
+import { Toaster } from "@/components/ui/toaster";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -31,7 +31,8 @@ export default function RootLayout({
           className={`${geistSans.variable} ${geistMono.variable}  bg-black`}
         >
           <Navbar />
-          <main>{children}</main>
+          <main className="text-white">{children}</main>
+          <Toaster />
           <div className="absolute w-full bottom-0 p-1 bg-gray-900">
             <div className="text-white text-center font-semibold ">
               © {new Date().getFullYear()} FreeTalkX™. All rights reserved.
