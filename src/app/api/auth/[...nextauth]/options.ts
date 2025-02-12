@@ -8,7 +8,7 @@ export const authOptions: NextAuthOptions = {
       name: "Credentials",
       id: "Credentials",
       credentials: {
-        username: {
+        email: {
           label: "Email",
           type: "text",
           placeholder: "username/email",
@@ -45,4 +45,32 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
+  callbacks: {
+    async jwt({ token, user }): Promise<any> {
+      if (user) {
+        token._id = user._id?.toString();
+        token.username = user.username;
+        token.email = user.email;
+      }
+
+      return token;
+    },
+
+    async session({ session, token }) {
+      if (token) {
+        session.user._id = token._id;
+        session.user.username = token.username;
+        session.user.email = token.email;
+      }
+
+      return session;
+    },
+  },
+  pages: {
+    signIn: "/sign-in",
+  },
+  session: {
+    strategy: "jwt",
+  },
+  secret: process.env.AUTH_SECRET,
 };
