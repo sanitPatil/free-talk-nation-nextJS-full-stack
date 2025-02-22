@@ -38,12 +38,15 @@ const UserSchema: Schema<User> = new Schema(
     },
     bio: {
       type: String,
+      default: "",
     },
     profileImage: {
       type: String,
+      default: "",
     },
     coverImage: {
       type: String,
+      default: "",
     },
   },
   {

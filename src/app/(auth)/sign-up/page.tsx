@@ -19,10 +19,16 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { useToast } from "@/hooks/use-toast";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { SignUpSchema } from "@/Schemas/signUpSchema";
+import { Loader2 } from "lucide-react";
+import axios, { Axios, AxiosError } from "axios";
 
 function SignUpComponent() {
+  const router = useRouter();
+  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
+  const [signUpError, setsignUpError] = useState("");
   const form = useForm<z.infer<typeof SignUpSchema>>({
     resolver: zodResolver(SignUpSchema),
     defaultValues: {
@@ -33,7 +39,34 @@ function SignUpComponent() {
   });
 
   const signUpHandler = async (data: z.infer<typeof SignUpSchema>) => {
-    console.log(data);
+    // setIsLoading(true);
+    // console.log(data);
+    // setIsLoading(false);
+    setIsLoading(true);
+    setsignUpError("");
+    try {
+      const signUpResponse = await axios.post("/api/sign-up", data);
+      // console.log(`done1`);
+
+      if (signUpResponse.data.error) {
+        setsignUpError(`${signUpResponse.data.error.messgae}`);
+      }
+      console.log(signUpResponse);
+      toast({
+        title: "user successfully Register",
+        description:
+          signUpResponse.data.message || "user successfully Register",
+      });
+
+      router.replace("/sign-in"); // by default redirection type is push
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        setsignUpError(`Error: ${error}`);
+      }
+      setsignUpError("Error: something went wrong!");
+    } finally {
+      setIsLoading(false);
+    }
   };
   return (
     <div className="py-4 ">
@@ -45,7 +78,7 @@ function SignUpComponent() {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(signUpHandler)}
-              className="space-y-10"
+              className="space-y-2"
             >
               <FormField
                 control={form.control}
@@ -66,7 +99,7 @@ function SignUpComponent() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Username</FormLabel>
+                    <FormLabel>Email</FormLabel>
                     <FormControl>
                       <Input type="email" placeholder="email" {...field} />
                     </FormControl>
@@ -90,8 +123,16 @@ function SignUpComponent() {
                 )}
               />
               <div className="text-center">
-                <Button type="submit" className="p-4 w-24 font-bold">
-                  Submit
+                <Button
+                  type="submit"
+                  disabled={isLoading}
+                  className="p-4 w-24 font-bold"
+                >
+                  {isLoading ? (
+                    <Loader2 className="w-5 h-5 block animate-spin" />
+                  ) : (
+                    " Submit"
+                  )}
                 </Button>
               </div>
             </form>

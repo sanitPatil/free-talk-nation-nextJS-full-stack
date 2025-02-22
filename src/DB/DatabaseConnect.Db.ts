@@ -16,7 +16,7 @@ const DbConnect = async () => {
       `${process.env.DB_CONNECT_URL}/${process.env.DATABASE_NAME}`
     );
 
-    console.log(dbConnectionResponse);
+    // console.log(dbConnectionResponse);
     if (dbConnectionResponse.connection.readyState === 1) {
       connObject.isConnected = true;
     }
