@@ -1,6 +1,6 @@
 "use client";
-import React, { useState } from "react";
-
+import React, { useCallback, useEffect, useState } from "react";
+import { useDebounceCallback } from "usehooks-ts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { signInSchema } from "@/Schemas/signInSchema";
@@ -22,13 +22,19 @@ import { useToast } from "@/hooks/use-toast";
 import { redirect, useRouter } from "next/navigation";
 import { SignUpSchema } from "@/Schemas/signUpSchema";
 import { Loader2 } from "lucide-react";
-import axios, { Axios, AxiosError } from "axios";
+import axios, { Axios, AxiosError, isAxiosError } from "axios";
 
 function SignUpComponent() {
   const router = useRouter();
   const { toast } = useToast();
+
   const [isLoading, setIsLoading] = useState(false);
   const [signUpError, setsignUpError] = useState("");
+
+  const [username, setUsername] = useState("");
+  const [usernameMessage, setUsernameMessage] = useState("");
+  const [checkingUsername, setCheckingUsername] = useState(false);
+  const debounced = useDebounceCallback(setUsername, 400);
   const form = useForm<z.infer<typeof SignUpSchema>>({
     resolver: zodResolver(SignUpSchema),
     defaultValues: {
@@ -37,6 +43,7 @@ function SignUpComponent() {
       password: "",
     },
   });
+  // console.log("username", username);
 
   const signUpHandler = async (data: z.infer<typeof SignUpSchema>) => {
     // setIsLoading(true);
@@ -68,17 +75,48 @@ function SignUpComponent() {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (username) {
+      setUsernameMessage("");
+      setCheckingUsername(true);
+      const checkUsernameValid = async () => {
+        try {
+          const { data } = await axios.get(
+            `/api/check-username-valid?username=${username}`
+          );
+          setUsernameMessage(data?.message);
+        } catch (error: any) {
+          if (error.response && error.response.status === 400) {
+            setUsernameMessage(error.response.data.message);
+          } else {
+            setUsernameMessage(error.message);
+          }
+        } finally {
+          setCheckingUsername(false);
+        }
+      };
+      checkUsernameValid();
+    }
+  }, [username]);
+  // console.log(username);
+
   return (
     <div className="py-4 ">
       <div className="max-w-xl mx-auto p-4 m-4 bg-gradient-to-b from-gray-900 to-neutral-800 text-3xl rounded-3xl">
         <div className="text-center mt-4 font-bold ">
           <h1>Sign Up</h1>
+          {signUpError && (
+            <p className="text-red-600 italic text-sm mt-2 px-4 rounded bg-gray-800">
+              Error:{signUpError}
+            </p>
+          )}
         </div>
         <div>
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(signUpHandler)}
-              className="space-y-2"
+              className="space-y-4"
             >
               <FormField
                 control={form.control}
@@ -87,9 +125,29 @@ function SignUpComponent() {
                   <FormItem>
                     <FormLabel>Username</FormLabel>
                     <FormControl>
-                      <Input type="text" placeholder="username" {...field} />
+                      <Input
+                        type="text"
+                        disabled={checkingUsername}
+                        placeholder="username"
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          debounced(e.target.value);
+                        }}
+                      />
                     </FormControl>
-
+                    <div>
+                      {usernameMessage &&
+                      usernameMessage === "username valid" ? (
+                        <div className="text-green-600 italic text-sm mt-2 px-4 rounded text-center">
+                          {usernameMessage}
+                        </div>
+                      ) : (
+                        <div className="text-red-600 italic text-sm mt-2 px-4 text-center rounded ">
+                          {usernameMessage}
+                        </div>
+                      )}
+                    </div>
                     <FormMessage />
                   </FormItem>
                 )}
