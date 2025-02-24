@@ -6,41 +6,42 @@ export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
-      id: "Credentials",
+
       credentials: {
-        email: {
-          label: "Email",
-          type: "text",
-          placeholder: "username/email",
-        },
+        email: { label: "Username", type: "text" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials: any): Promise<any> {
+      async authorize(credentials, req): Promise<any> {
         await DbConnect();
         try {
+          // console.log(credentials?.email);
+          // console.log(credentials?.password);
+
           const user = await userModel.findOne({
             $or: [
-              { username: credentials.identifier },
-              { email: credentials.identifier },
+              { username: credentials?.email },
+              { email: credentials?.email },
             ],
           });
+          // console.log(user);
 
           if (!user) {
-            return new Error(
-              `user with given credential not found please login`
-            );
+            return null;
           }
 
           const isPasswordValid: boolean = user.validatePassword(
-            credentials.password
+            credentials?.password as string
           );
 
-          if (!isPasswordValid) return new Error("In-valid credentials");
+          if (!isPasswordValid) return null;
 
-          return user;
-        } catch (error: any) {
-          console.error(`AUTH OPTION: ${error}`);
-          return new Error(error);
+          const resUser = await userModel
+            .findById(user._id)
+            .select("-password");
+
+          return resUser;
+        } catch (error) {
+          return null;
         }
       },
     }),
@@ -52,17 +53,14 @@ export const authOptions: NextAuthOptions = {
         token.username = user.username;
         token.email = user.email;
       }
-
       return token;
     },
-
     async session({ session, token }) {
       if (token) {
         session.user._id = token._id;
         session.user.username = token.username;
         session.user.email = token.email;
       }
-
       return session;
     },
   },

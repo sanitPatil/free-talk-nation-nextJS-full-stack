@@ -8,7 +8,7 @@ import * as z from "zod";
 import {
   Form,
   FormControl,
-  FormDescription,
+  
   FormField,
   FormItem,
   FormLabel,
@@ -17,12 +17,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { signIn } from "next-auth/react";
+
 import { useToast } from "@/hooks/use-toast";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { SignUpSchema } from "@/Schemas/signUpSchema";
 import { Loader2 } from "lucide-react";
-import axios, { Axios, AxiosError, isAxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 
 function SignUpComponent() {
   const router = useRouter();

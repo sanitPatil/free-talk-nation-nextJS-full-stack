@@ -1,6 +1,6 @@
 import DbConnect from "@/DB/DatabaseConnect.Db";
 import userModel from "@/Models/User.Model";
-import { SignUpSchema, UsernameSchemaValidation } from "@/Schemas/signUpSchema";
+import {  UsernameSchemaValidation } from "@/Schemas/signUpSchema";
 
 export async function GET(request: Request): Promise<any> {
   await DbConnect();

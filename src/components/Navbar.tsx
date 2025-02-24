@@ -1,6 +1,9 @@
+"use client";
 import { X } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import { Button } from "./ui/button";
+import { signOut } from "next-auth/react";
 
 function Navbar() {
   return (
@@ -22,6 +25,9 @@ function Navbar() {
           </li>
           <li className="hover:border-b-2">
             <Link href={"/sign-up"}>Sign up</Link>
+          </li>
+          <li className="hover:border-b-2">
+            <Button onClick={() => signOut()}>Log out</Button>
           </li>
         </ul>
       </div>

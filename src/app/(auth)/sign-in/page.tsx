@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { ReactNode, useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -8,7 +8,6 @@ import * as z from "zod";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -20,8 +19,10 @@ import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
-function signInComponent() {
+import { Loader2Icon } from "lucide-react";
+function SignInComponent(): ReactNode {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [loginMessage, setLoginMessage] = useState<string>("");
   const { toast } = useToast();
   const router = useRouter();
   const form = useForm<z.infer<typeof signInSchema>>({
@@ -33,30 +34,29 @@ function signInComponent() {
   });
 
   const signInHandler = async (data: z.infer<typeof signInSchema>) => {
-    // console.log(data);
+    setIsLoading(true);
+    setLoginMessage("");
+
     const result = await signIn("credentials", {
       redirect: false,
-      identifier: data.identifier,
+      email: data.identifier,
       password: data.password,
-      // callbackUrl: "/",
     });
-    console.log("result", result);
-
-    if (!result?.ok) {
+    // alert(`OK${result?.ok},STATUS ${result?.status}, URL${result?.url}`);
+    if (result?.ok) {
       toast({
-        title: "Login Error!",
-        description: result?.error || "failed to login",
+        title: "login Successfully",
+        description: "redirecting...",
       });
-      router.replace("/sign-in");
-      return;
+      router.push("/"); // Redirect after successful login
     } else {
       toast({
-        title: `Login Succesfully`,
-        description: `welcome to FreeTalk x`,
+        title: "login failed",
+        description: "invalid credentials...",
       });
-      router.replace("/");
-      return;
+      setLoginMessage("In-valid credetnials");
     }
+    setIsLoading(false);
   };
 
   return (
@@ -84,11 +84,18 @@ function signInComponent() {
                         {...field}
                       />
                     </FormControl>
-
+                    <div>
+                      {loginMessage && (
+                        <p className="text-red-600 font-bold text-sm italic text-center ">
+                          {loginMessage}
+                        </p>
+                      )}
+                    </div>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="password"
@@ -105,7 +112,11 @@ function signInComponent() {
               />
               <div className="text-center">
                 <Button type="submit" className="p-4 w-24 font-bold">
-                  Submit
+                  {isLoading ? (
+                    <Loader2Icon className="w-4 h-4 inline animate-spin" />
+                  ) : (
+                    "submit"
+                  )}
                 </Button>
               </div>
             </form>
@@ -122,4 +133,4 @@ function signInComponent() {
   );
 }
 
-export default signInComponent;
+export default SignInComponent;
