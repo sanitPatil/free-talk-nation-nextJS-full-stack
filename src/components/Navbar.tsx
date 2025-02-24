@@ -27,7 +27,12 @@ function Navbar() {
             <Link href={"/sign-up"}>Sign up</Link>
           </li>
           <li className="hover:border-b-2">
-            <Button onClick={() => signOut()}>Log out</Button>
+            <Button
+              className="font-bold p-2 text-xl text-red-700"
+              onClick={() => signOut()}
+            >
+              Log out
+            </Button>
           </li>
         </ul>
       </div>
