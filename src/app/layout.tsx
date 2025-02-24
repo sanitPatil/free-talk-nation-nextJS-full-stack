@@ -30,7 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Provider store={store}>
-        <AuthProvider>
+        <AuthProvider refetchInterval={5 * 60}>
           <body
             className={`${geistSans.variable} ${geistMono.variable}  bg-black`}
           >
