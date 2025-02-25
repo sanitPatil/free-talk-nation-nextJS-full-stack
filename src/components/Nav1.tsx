@@ -1,4 +1,12 @@
-import { Contact, Home, Info, Settings2, User } from "lucide-react";
+import {
+  BookDashed,
+  Contact,
+  Home,
+  Info,
+  LayoutDashboard,
+  Settings2,
+  User,
+} from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
@@ -6,9 +14,10 @@ function Nav1() {
   const options = [
     { title: "Home", icon: <Home />, link: "/home" },
     { title: "Profile", icon: <User />, link: "/home/profile" },
+    { title: "DashBoard", icon: <LayoutDashboard />, link: "/home/dashboard" },
     { title: "Settings", icon: <Settings2 />, link: "/home/settings" },
-    { title: "Contact", icon: <Contact />, link: "/home/contact" },
-    { title: "About", icon: <Info />, link: "/home/about" },
+
+    // { title: "About", icon: <Info />, link: "/home/about" },
   ];
 
   return (

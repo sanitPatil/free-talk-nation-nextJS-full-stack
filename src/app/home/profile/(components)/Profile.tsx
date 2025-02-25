@@ -4,6 +4,10 @@ import { Label } from "@radix-ui/react-label";
 import { Edit, Edit2 } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
+import UpdateCoverImage from "./UpdateCover";
+import UpdateAvatar from "./UpdateAvatar";
+import UpdateUsername from "./UpdateUsername";
+import UpdateEmail from "./UpdateEmail";
 
 function Profile() {
   const [imageSrc, setImageSrc] = useState("/avatar-placeholder.png");
@@ -18,7 +22,7 @@ function Profile() {
             </div>
           </div>
           <div className="relative bottom-0 m-4">
-            <Edit />
+            <UpdateCoverImage />
           </div>{" "}
         </div>
         {/* profile image  */}
@@ -38,22 +42,16 @@ function Profile() {
               )}
             </div>
           </div>
-          <Button>
-            <Edit />
-          </Button>
+          <UpdateAvatar />
         </div>
-        <div className="flex justify-center gap-4 text-center text-xl font-mono font-bold ">
+        <div className="flex justify-center gap-4 text-center text-xl  font-bold ">
           <div className=" flex justify-center gap-2">
             <Label>Username</Label>
-            <Button type="button">
-              <Edit />
-            </Button>
+            <UpdateUsername />
           </div>
           <div className=" flex justify-center gap-7">
             <Label>email</Label>
-            <Button type="button">
-              <Edit />
-            </Button>
+            <UpdateEmail />
           </div>
         </div>
       </div>
