@@ -52,7 +52,7 @@ function page() {
               </div>
               <div className="flex flex-col   justify-between">
                 <SearchBar />
-                <div className="mt-12">
+                <div className="mt-12  text-center">
                   <AddPost />
                 </div>
               </div>
@@ -61,6 +61,8 @@ function page() {
         </div>
       </div>
     );
+
+    // if user is not login
   } else {
     return (
       <div className="absolute w-screen h-screen">
