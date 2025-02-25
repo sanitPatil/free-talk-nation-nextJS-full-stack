@@ -5,10 +5,10 @@ import React from "react";
 function Nav1() {
   const options = [
     { title: "Home", icon: <Home />, link: "/home" },
-    { title: "Profile", icon: <User />, link: "/profile" },
-    { title: "Settings", icon: <Settings2 />, link: "/settings" },
-    { title: "Contact", icon: <Contact />, link: "/contact" },
-    { title: "About", icon: <Info />, link: "/about" },
+    { title: "Profile", icon: <User />, link: "/home/profile" },
+    { title: "Settings", icon: <Settings2 />, link: "/home/settings" },
+    { title: "Contact", icon: <Contact />, link: "/home/contact" },
+    { title: "About", icon: <Info />, link: "/home/about" },
   ];
 
   return (

@@ -11,11 +11,8 @@ const tags = Array.from({ length: 50 }).map(
 
 function PostList() {
   return (
-    <ScrollArea className="h-96 w-full rounded-md ">
+    <ScrollArea className="h-[35rem] m-2 w-full rounded-md ">
       <div className="p-4">
-        <h4 className="flex justify-between mx-4 mb-2 ">
-          <Button>Refresh</Button>
-        </h4>
         {tags.map((tag) => (
           <div key={tag}>
             <div className="text-sm font-bold">{tag}</div>
