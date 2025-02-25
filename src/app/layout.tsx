@@ -30,9 +30,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Provider store={store}>
-        <AuthProvider refetchInterval={5 * 60}>
+        <AuthProvider>
           <body
-            className={`${geistSans.variable} ${geistMono.variable}  bg-black`}
+            className={`${geistSans.variable} ${geistMono.variable} bg-gray-800 `}
           >
             <main className="text-white min-w-screen  min-h-screen">
               <Navbar />
@@ -42,7 +42,7 @@ export default function RootLayout({
 
             <footer className="bg-gray-900 text-white py-6">
               <div className="container mx-auto text-center">
-                <p className="text-sm font-bold">
+                <p className="text-sm font-semibold">
                   &copy; 2025 FreeTalk x. All rights reserved.
                 </p>
               </div>

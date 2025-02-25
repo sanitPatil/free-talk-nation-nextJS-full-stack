@@ -1,5 +1,5 @@
 "use client";
-import { X } from "lucide-react";
+import { Contact, Home, Info, Settings2, User, X } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect } from "react";
 import { Button } from "./ui/button";
@@ -23,7 +23,7 @@ function Navbar() {
         </div>
       </div>
       <div className="">
-        {status !== "unauthenticated" ? (
+        {status == "authenticated" ? (
           <ul className="flex gap-4 p-4 rounded-full text-xl font-bold">
             <li className="hover:border-b-2">
               <Button
