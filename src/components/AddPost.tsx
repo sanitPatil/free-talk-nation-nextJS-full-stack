@@ -3,7 +3,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
-import { ImageIcon, VideoIcon, FileIcon, SendIcon, XIcon } from "lucide-react";
+import {
+  ImageIcon,
+  VideoIcon,
+  FileIcon,
+  SendIcon,
+  XIcon,
+  Loader,
+} from "lucide-react";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -25,7 +32,7 @@ import { useSession } from "next-auth/react";
 
 export default function AddPost() {
   const [showModal, setShowModal] = useState(false);
-  const [addPostErrorMessage, setaddPostErrorMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
   const { toast } = useToast();
@@ -45,13 +52,13 @@ export default function AddPost() {
   const handlePostSubmit = async (
     data: z.infer<typeof PostSchemaValidation>
   ) => {
-    // console.log(data);
+    setIsLoading(true);
+
     if (!data.title || !data.description) {
-      setaddPostErrorMessage("tittle and description required");
+      setIsLoading(false);
       return router.refresh();
     }
     const formData = new FormData();
-    formData.append("owner", session?.user._id);
     formData.append("title", data.title);
     formData.append("description", data.description);
     formData.append("file", data.file);
@@ -69,9 +76,7 @@ export default function AddPost() {
           title: "tweet upload successfully",
           description: response?.data.message,
         });
-        router.replace("/home");
       }
-      return;
     } catch (error) {
       if (axios.isAxiosError(error)) {
         // setaddPostErrorMessage(error.response?.data.message);
@@ -80,7 +85,6 @@ export default function AddPost() {
           description: error.response?.data.message,
           variant: "destructive",
         });
-        router.refresh();
       } else {
         // setaddPostErrorMessage("failed to upload Tweet!!! try again");
         toast({
@@ -88,10 +92,16 @@ export default function AddPost() {
           description: "failed to upload Tweet!!! try again",
           variant: "destructive",
         });
-        router.refresh();
       }
     } finally {
-      setaddPostErrorMessage("");
+      setIsLoading(false);
+      form.reset({
+        title: "",
+        description: "",
+        file: undefined,
+      });
+      setShowModal(false);
+      router.refresh();
     }
   };
 
@@ -229,7 +239,8 @@ export default function AddPost() {
                             onChange={(e) => {
                               // const file =  || undefined;
                               // IMPORTANT -SANIT
-                              field.onChange(e.target.files?.[0]);
+                              const file = e.target.files?.[0] || null;
+                              field.onChange(file);
                               e.target.value = "";
                             }} // Handle file selection
                           />
@@ -243,11 +254,18 @@ export default function AddPost() {
                   <div className="flex justify-end">
                     <Button
                       type="submit"
+                      disabled={isLoading}
                       variant={"outline"}
                       className="flex items-center font-bold space-x-2 text-black"
                     >
                       <SendIcon className="w-4 h-4" />
-                      <span className="">Post</span>
+                      <span className="">
+                        {isLoading ? (
+                          <Loader className="animate-spin inline" />
+                        ) : (
+                          "Post"
+                        )}
+                      </span>
                     </Button>
                   </div>
                 </CardContent>

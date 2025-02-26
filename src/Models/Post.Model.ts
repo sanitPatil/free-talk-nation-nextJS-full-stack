@@ -1,16 +1,17 @@
 import mongoose, { Schema, Document, Types } from "mongoose";
 
 export interface Post extends Document {
-  onwer: Types.ObjectId;
+  owner: Types.ObjectId;
   title: string;
   description: string;
   file: string;
+  file_public_id: string;
   // tags : id ->string
 }
 
 const PostSchema: Schema<Post> = new Schema(
   {
-    onwer: {
+    owner: {
       type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
@@ -24,6 +25,9 @@ const PostSchema: Schema<Post> = new Schema(
       requried: true,
     },
     file: {
+      type: String,
+    },
+    file_public_id: {
       type: String,
     },
   },
