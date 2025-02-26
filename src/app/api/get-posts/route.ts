@@ -28,6 +28,11 @@ export async function GET(request: Request): Promise<any> {
           "ownerDetails.profileImage": 1,
         },
       },
+      {
+        $sort: {
+          updatedAt: -1,
+        },
+      },
     ]);
 
     return NextResponse.json(

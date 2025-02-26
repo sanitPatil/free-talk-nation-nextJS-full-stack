@@ -20,7 +20,7 @@ export default function TweetCard({ tweet }) {
   const { data: session, status } = useSession();
 
   return (
-    <div className="flex gap-2 border-b  p-4 m-2 border-gray-200">
+    <div className={` flex gap-2 border-b   p-4 m-2 border-gray-200`}>
       {/* User Avatar */}
       <Avatar className="w-10 h-10">
         <AvatarImage
@@ -34,7 +34,7 @@ export default function TweetCard({ tweet }) {
       </Avatar>
 
       {/* Tweet Content */}
-      <div className="flex flex-col ">
+      <div className="flex flex-col  w-full">
         {/* User Info */}
         <div className="flex items-center  text-sm">
           <h3 className="font-semibold mr-2">{tweet.ownerDetails.username}</h3>
@@ -82,7 +82,7 @@ export default function TweetCard({ tweet }) {
 
         {/* Tweet Image */}
         {tweet.file && (
-          <div className="mt-2">
+          <div className={`mt-2`}>
             <Image
               width={700}
               height={160}

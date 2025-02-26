@@ -38,7 +38,6 @@ export default function AddPost() {
   const router = useRouter();
   const { toast } = useToast();
   const { data: session, status } = useSession();
-  // console.log(session);
 
   //  form
   const form = useForm<z.infer<typeof PostSchemaValidation>>({
@@ -62,8 +61,9 @@ export default function AddPost() {
     const formData = new FormData();
     formData.append("title", data.title);
     formData.append("description", data.description);
-    formData.append("file", data.file);
-    console.log(formData);
+    if (data.file) {
+      formData.append("file", data.file);
+    }
 
     try {
       const response = await axios.post("/api/add-post", formData, {
@@ -102,7 +102,7 @@ export default function AddPost() {
         file: undefined,
       });
       setShowModal(false);
-      router.refresh();
+      router.replace("/home");
     }
   };
 
