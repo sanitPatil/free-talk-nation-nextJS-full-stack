@@ -4,21 +4,39 @@ import * as React from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "./ui/button";
-
-const tags = Array.from({ length: 50 }).map(
-  (_, i, a) => `v1.2.0-beta.${a.length - i}`
-);
+import axios from "axios";
+import TweetCard from "./TweetCard";
 
 function PostList() {
+  const [postList, setPostList] = React.useState([]);
+  const [errorMessage, setErrorMessage] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
+  React.useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get("/api/get-posts");
+        if (response.status === 200) {
+          setPostList(response.data.list);
+        } else {
+          setErrorMessage(response.data.message);
+        }
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          setErrorMessage(error.response?.data.message);
+        }
+      } finally {
+        setErrorMessage("");
+      }
+    };
+    fetchPosts();
+  }, []);
+  console.log(postList);
+
   return (
     <ScrollArea className="h-[35rem] m-2 w-full rounded-md ">
-      <div className="p-4">
-        {tags.map((tag) => (
-          <div key={tag}>
-            <div className="text-sm font-bold">{tag}</div>
-            <Separator className="my-2" />
-          </div>
-        ))}
+      <div className="m-2">
+        {postList &&
+          postList.map((post) => <TweetCard tweet={post} key={post._id} />)}
       </div>
     </ScrollArea>
   );

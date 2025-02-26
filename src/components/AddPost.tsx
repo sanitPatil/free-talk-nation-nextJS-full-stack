@@ -29,6 +29,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 
 export default function AddPost() {
   const [showModal, setShowModal] = useState(false);
@@ -107,7 +108,7 @@ export default function AddPost() {
 
   return (
     <>
-      <Button onClick={() => setShowModal(true)} className="">
+      <Button onClick={() => setShowModal(true)} className="border">
         Add Post
       </Button>
 
@@ -197,7 +198,9 @@ export default function AddPost() {
                               {/* Show file preview if it's an image */}
                               {field.value instanceof File &&
                               field.value.type.startsWith("image/") ? (
-                                <img
+                                <Image
+                                  width={40}
+                                  height={40}
                                   src={URL.createObjectURL(field.value)}
                                   alt="Preview"
                                   className="w-20 h-20 object-cover rounded-md shadow-md"
