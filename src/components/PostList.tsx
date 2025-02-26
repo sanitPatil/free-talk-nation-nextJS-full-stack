@@ -6,12 +6,13 @@ import { Button } from "./ui/button";
 import axios from "axios";
 import TweetCard from "./TweetCard";
 import AddPost from "./AddPost";
+import { useRouter } from "next/navigation";
 
 function PostList() {
   const [postList, setPostList] = React.useState([]);
   const [errorMessage, setErrorMessage] = React.useState("");
   const [loading, setLoading] = React.useState(false);
-
+  const router = useRouter();
   const fetchPosts = React.useCallback(async () => {
     setLoading(true);
     try {
@@ -33,8 +34,7 @@ function PostList() {
   // Fetch posts when the component mounts
   React.useEffect(() => {
     fetchPosts();
-  }, [fetchPosts]);
-  console.log(postList);
+  }, []);
 
   return (
     <div>
