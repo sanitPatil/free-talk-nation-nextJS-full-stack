@@ -49,11 +49,12 @@ export default function TweetCard({ tweet }) {
       });
     } finally {
       setLoading(false);
-      router.replace("/home");
     }
+    router.replace("/");
   };
+
   return (
-    <div className={` flex gap-2 border-b   p-4 m-2 border-gray-200`}>
+    <div className={` flex gap-2 border-b p-4 m-2 border-gray-200`}>
       {/* User Avatar */}
       <Avatar className="w-10 h-10">
         <AvatarImage
@@ -115,39 +116,43 @@ export default function TweetCard({ tweet }) {
         <p className="text-white text-sm mt-1">{tweet.description}</p>
 
         {/* Tweet Image */}
-        {tweet.file.split("/")[5] === "image" ? (
-          <div className={`mt-2`}>
-            <Image
-              width={700}
-              height={160}
-              src={tweet.file}
-              alt="Tweet Image"
-              className="rounded-lg "
-            />
-          </div>
-        ) : tweet.file.split("/")[5] === "video" ? (
-          <div className="border ">
-            <video
-              width="400"
-              height="200"
-              controls
-              preload="none"
-              className=" rounded-md border"
-            >
-              <source src={tweet.file} type="video/mp4" />
-              <track
-                src="/path/to/captions.vtt"
-                kind="subtitles"
-                srcLang="en"
-                label="English"
-              />
-              Your browser does not support the video tag.
-            </video>
-          </div>
-        ) : (
-          <div>
-            <iframe src={tweet.file} width="100%" height="600px" />
-          </div>
+        {tweet.file && (
+          <>
+            {tweet.file.split("/")[5] === "image" ? (
+              <div className={`mt-2`}>
+                <Image
+                  width={700}
+                  height={160}
+                  src={tweet.file}
+                  alt="Tweet Image"
+                  className="rounded-lg "
+                />
+              </div>
+            ) : tweet.file.split("/")[5] === "video" ? (
+              <div className="border ">
+                <video
+                  width="400"
+                  height="200"
+                  controls
+                  preload="none"
+                  className=" rounded-md border"
+                >
+                  <source src={tweet.file} type="video/mp4" />
+                  <track
+                    src="/path/to/captions.vtt"
+                    kind="subtitles"
+                    srcLang="en"
+                    label="English"
+                  />
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            ) : (
+              <div>
+                <iframe src={tweet.file} width="100%" height="600px" />
+              </div>
+            )}
+          </>
         )}
 
         {/* Tweet Actions */}

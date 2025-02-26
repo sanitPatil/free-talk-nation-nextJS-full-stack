@@ -34,7 +34,7 @@ function PostList() {
   // Fetch posts when the component mounts
   React.useEffect(() => {
     fetchPosts();
-  }, []);
+  }, [router]);
 
   return (
     <div>

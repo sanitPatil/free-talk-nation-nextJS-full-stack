@@ -102,8 +102,8 @@ export default function AddPost() {
         file: undefined,
       });
       setShowModal(false);
-      router.replace("/home");
     }
+    router.replace("/");
   };
 
   return (
