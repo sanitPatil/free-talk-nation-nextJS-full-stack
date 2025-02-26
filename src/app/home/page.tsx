@@ -33,9 +33,6 @@ function page() {
         <div className="flex  ">
           <div className="w-1/2 h-screen bg-black/80 flex-auto ...">
             <div className=" m-4">
-              <h4 className="flex justify-between mx-4  mb-2 ">
-                <Button>Refresh</Button>
-              </h4>
               <PostList />
             </div>
           </div>
@@ -52,10 +49,10 @@ function page() {
               </div>
               <div className="flex flex-col   justify-between">
                 <SearchBar />
-                <div className="mt-12  text-center">
-                  <AddPost />
-                </div>
               </div>
+            </div>
+            <div className="absolute bottom-4 right-32">
+              <AddPost />
             </div>
           </div>
         </div>

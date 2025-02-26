@@ -2,43 +2,65 @@
 import * as React from "react";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
 import { Button } from "./ui/button";
 import axios from "axios";
 import TweetCard from "./TweetCard";
+import AddPost from "./AddPost";
 
 function PostList() {
   const [postList, setPostList] = React.useState([]);
   const [errorMessage, setErrorMessage] = React.useState("");
   const [loading, setLoading] = React.useState(false);
-  React.useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const response = await axios.get("/api/get-posts");
-        if (response.status === 200) {
-          setPostList(response.data.list);
-        } else {
-          setErrorMessage(response.data.message);
-        }
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-          setErrorMessage(error.response?.data.message);
-        }
-      } finally {
-        setErrorMessage("");
+
+  const fetchPosts = React.useCallback(async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get("/api/get-posts");
+      if (response.status === 200) {
+        setPostList(response.data.list);
+      } else {
+        setErrorMessage(response.data.message || "Failed to fetch posts.");
       }
-    };
-    fetchPosts();
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        setErrorMessage(error.response?.data?.message || "An error occurred.");
+      }
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  // Fetch posts when the component mounts
+  React.useEffect(() => {
+    fetchPosts();
+  }, [fetchPosts]);
   console.log(postList);
 
   return (
-    <ScrollArea className="h-[35rem] m-2 w-full rounded-md ">
-      <div className="m-2">
-        {postList &&
-          postList.map((post) => <TweetCard tweet={post} key={post._id} />)}
+    <div>
+      <div className="p-1  flex justify-between">
+        <Button
+          type="button"
+          className="text-right"
+          onClick={fetchPosts}
+          disabled={loading}
+        >
+          {loading ? "Refreshing..." : "Refresh"}
+        </Button>
       </div>
-    </ScrollArea>
+      {errorMessage && (
+        <p className="text-red-500 text-center">{errorMessage}</p>
+      )}
+      <ScrollArea className="h-[35rem] m-2 w-full rounded-md">
+        <div className="m-2">
+          {postList.length > 0 ? (
+            postList.map((post) => <TweetCard tweet={post} key={post._id} />)
+          ) : (
+            <p className="text-gray-500 text-center">No posts available.</p>
+          )}
+        </div>
+      </ScrollArea>
+    </div>
   );
 }
 

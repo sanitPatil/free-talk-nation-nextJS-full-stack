@@ -46,3 +46,16 @@ export const uploadFile = async (
 
 // file removal -----
 // todo
+
+export const removeFile = async (publicId) => {
+  const resource_type = publicId.split("/")[1];
+  try {
+    const result = await cloudinary.v2.uploader.destroy(publicId, {
+      resource_type,
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};

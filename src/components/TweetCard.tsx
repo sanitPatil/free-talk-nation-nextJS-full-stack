@@ -16,9 +16,42 @@ import {
 } from "@/components/ui/popover";
 import { Label } from "./ui/label";
 import { Button } from "./ui/button";
+import axios from "axios";
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 export default function TweetCard({ tweet }) {
   const { data: session, status } = useSession();
+  const [isLoading, setLoading] = useState(false);
+  const { toast } = useToast();
+  const router = useRouter();
+  const handleDelete = async (postId) => {
+    setLoading(true);
+    try {
+      const response = await axios.delete(`/api/delete-post/${postId}`);
 
+      if (response.status === 200) {
+        toast({
+          title: "successfully delete tweet!",
+          description: response.data.message || "",
+        });
+      } else {
+        toast({
+          title: "failed !",
+          description: response.data.message || "",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: " failed!",
+        description: "failed tweet",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+      router.replace("/home");
+    }
+  };
   return (
     <div className={` flex gap-2 border-b   p-4 m-2 border-gray-200`}>
       {/* User Avatar */}
@@ -69,6 +102,7 @@ export default function TweetCard({ tweet }) {
                       type="button"
                       variant="ghost"
                       className="w-full font-medium text-white hover:bg-red-600"
+                      onClick={() => handleDelete(tweet._id)}
                     >
                       Delete
                     </Button>

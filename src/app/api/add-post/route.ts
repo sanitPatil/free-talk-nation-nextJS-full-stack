@@ -5,6 +5,7 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import postModel from "@/Models/Post.Model";
 import mongoose from "mongoose";
+import { encrypt } from "@/utils/EncDenc.utils";
 export async function POST(request: Request): Promise<any> {
   const token = await getToken({ req: request });
   if (!token)
@@ -26,8 +27,7 @@ export async function POST(request: Request): Promise<any> {
     const description = formData.get("description");
     const file = formData.get("file");
     const owner = new mongoose.Types.ObjectId(token._id);
-    
-    
+
     let fileResponse = undefined;
     let decryptPublicId = undefined;
     if (file) {
@@ -46,7 +46,7 @@ export async function POST(request: Request): Promise<any> {
 
       fileResponse = await uploadFile(buffer, file);
 
-      decryptPublicId = await bcrypt.hash(fileResponse.public_id, 10);
+      decryptPublicId = encrypt(fileResponse.public_id);
     }
 
     const savePost = await postModel.create({

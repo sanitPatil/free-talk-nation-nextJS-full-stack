@@ -108,7 +108,11 @@ export default function AddPost() {
 
   return (
     <>
-      <Button onClick={() => setShowModal(true)} className="border">
+      <Button
+        onClick={() => setShowModal(true)}
+        type="button"
+        className="text-right w-40"
+      >
         Add Post
       </Button>
 
@@ -122,7 +126,7 @@ export default function AddPost() {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(handlePostSubmit)}
-              className="w-full  flex justify-center"
+              className="w-full z-50 flex justify-center"
             >
               <Card className="w-full max-w-5xl bg-gray-800 text-white p-4 rounded-2xl shadow-xl">
                 <div className="flex justify-between items-center">
