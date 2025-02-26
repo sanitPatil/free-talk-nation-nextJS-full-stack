@@ -8,7 +8,6 @@ import * as z from "zod";
 import {
   Form,
   FormControl,
-  
   FormField,
   FormItem,
   FormLabel,
@@ -64,7 +63,6 @@ function SignUpComponent() {
         description:
           signUpResponse.data.message || "user successfully Register",
       });
-
       router.replace("/sign-in"); // by default redirection type is push
     } catch (error) {
       if (error instanceof AxiosError) {

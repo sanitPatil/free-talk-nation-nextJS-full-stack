@@ -4,6 +4,7 @@ export interface Post extends Document {
   onwer: Types.ObjectId;
   title: string;
   description: string;
+  file: string;
   // tags : id ->string
 }
 
@@ -21,6 +22,9 @@ const PostSchema: Schema<Post> = new Schema(
     description: {
       type: String,
       requried: true,
+    },
+    file: {
+      type: String,
     },
   },
   {

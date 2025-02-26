@@ -7,7 +7,7 @@ export async function middleware(request: NextRequest) {
 
   const url = request.nextUrl;
 
-  console.log("Middleware Running → Path:", url.pathname, "Token:", token);
+  // console.log("Middleware Running → Path:", url.pathname, "Token:", token);
 
   if (token && (url.pathname === "/sign-in" || url.pathname === "/sign-up")) {
     return NextResponse.redirect(new URL("/home", request.url));
