@@ -1,11 +1,16 @@
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { motion } from "framer-motion";
 import {
   EllipsisIcon,
   Heart,
+  Loader,
   MessageCircle,
   MoreVertical,
+  PenSquare,
   Repeat2,
   Share,
+  Trash2,
+  Trash2Icon,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
@@ -20,39 +25,41 @@ import axios from "axios";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 export default function TweetCard({ tweet }) {
   const { data: session, status } = useSession();
   const [isLoading, setLoading] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
-  const handleDelete = async (postId) => {
-    setLoading(true);
-    try {
-      const response = await axios.delete(`/api/delete-post/${postId}`);
+  // const handleDelete = async (postId) => {
+  //   setLoading(true);
+  //   try {
+  //     const response = await axios.delete(`/api/delete-post/${postId}`);
 
-      if (response.status === 200) {
-        toast({
-          title: "successfully delete tweet!",
-          description: response.data.message || "",
-        });
-      } else {
-        toast({
-          title: "failed !",
-          description: response.data.message || "",
-        });
-      }
-    } catch (error) {
-      toast({
-        title: " failed!",
-        description: "failed tweet",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
-    router.replace("/");
-  };
-
+  //     if (response.status === 200) {
+  //       toast({
+  //         title: "successfully delete tweet!",
+  //         description: response.data.message || "",
+  //       });
+  //     } else {
+  //       toast({
+  //         title: "failed !",
+  //         description: response.data.message || "",
+  //       });
+  //     }
+  //   } catch (error) {
+  //     toast({
+  //       title: " failed!",
+  //       description: "failed tweet",
+  //       variant: "destructive",
+  //     });
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  //   router.replace("/");
+  // };
+  let fileExtension = null;
+  if (tweet.file) fileExtension = tweet.file.split(".").pop().toLowerCase();
   return (
     <div className={` flex gap-2 border-b p-4 m-2 border-gray-200`}>
       {/* User Avatar */}
@@ -77,67 +84,40 @@ export default function TweetCard({ tweet }) {
           </span>
         </div>
 
-        {/* Tweet Text */}
         <div className="flex justify-between">
           <div className="font-bold text-xl">{tweet.title}</div>
-          {tweet.ownerDetails._id === session?.user._id && (
-            <span>
-              <Popover>
-                <PopoverTrigger></PopoverTrigger>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button variant="ghost" size="icon">
-                      <MoreVertical className="w-5 h-5 text-gray-500" />
-                    </Button>
-                  </PopoverTrigger>
-
-                  <PopoverContent className="bg-black text-white w-24 flex flex-col p-1 rounded-lg shadow-lg">
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      className="w-full font-medium text-white hover:bg-gray-700"
-                    >
-                      Edit
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      className="w-full font-medium text-white hover:bg-red-600"
-                      onClick={() => handleDelete(tweet._id)}
-                    >
-                      Delete
-                    </Button>
-                  </PopoverContent>
-                </Popover>
-              </Popover>
-            </span>
-          )}
         </div>
-        <p className="text-white text-sm mt-1">{tweet.description}</p>
-
-        {/* Tweet Image */}
-        {tweet.file && (
-          <>
-            {tweet.file.split("/")[5] === "image" ? (
-              <div className={`mt-2`}>
+        <p className="text-white text-sm mt-1">
+          {tweet.description.length > 150
+            ? `${tweet.description.split(" ").slice(0, 150).join(" ")}`
+            : tweet.description}
+          <span className="ml-2 text-blue-700">
+            <Link href={`/home/tweet-display/${tweet._id}`}>read more...</Link>
+          </span>
+        </p>
+        <div className="p-1 mt-2 flex justify-center">
+          {tweet.file && (
+            <>
+              {/* Tweet Image */}
+              {["jpg", "jpeg", "png", "gif", "webp"].includes(fileExtension) ? (
                 <Image
-                  width={700}
-                  height={160}
                   src={tweet.file}
                   alt="Tweet Image"
-                  className="rounded-lg "
+                  width={400}
+                  height={400}
+                  layout="intrinsic"
+                  className="rounded-lg"
+                  unoptimized // Required if using an external image source like Firebase
                 />
-              </div>
-            ) : tweet.file.split("/")[5] === "video" ? (
-              <div className="border ">
+              ) : ["mp4", "webm", "ogg"].includes(fileExtension) ? (
                 <video
                   width="400"
                   height="200"
                   controls
                   preload="none"
-                  className=" rounded-md border"
+                  className="rounded-md border"
                 >
-                  <source src={tweet.file} type="video/mp4" />
+                  <source src={tweet.file} type={`video/${fileExtension}`} />
                   <track
                     src="/path/to/captions.vtt"
                     kind="subtitles"
@@ -146,14 +126,19 @@ export default function TweetCard({ tweet }) {
                   />
                   Your browser does not support the video tag.
                 </video>
-              </div>
-            ) : (
-              <div>
-                <iframe src={tweet.file} width="100%" height="600px" />
-              </div>
-            )}
-          </>
-        )}
+              ) : (
+                <div>
+                  <iframe
+                    src={tweet.file}
+                    width="100%"
+                    height="600px"
+                    sandbox="allow-scripts allow-same-origin allow-popups"
+                  />
+                </div>
+              )}
+            </>
+          )}
+        </div>
 
         {/* Tweet Actions */}
         <div className="flex justify-between mt-2 p-2 text-gray-500 text-xs ">

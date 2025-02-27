@@ -112,6 +112,7 @@ export default function AddPost() {
         onClick={() => setShowModal(true)}
         type="button"
         className="text-right w-40"
+        disabled={isLoading}
       >
         Add Post
       </Button>
@@ -146,7 +147,12 @@ export default function AddPost() {
                       <FormItem>
                         <FormLabel>title</FormLabel>
                         <FormControl>
-                          <Input required placeholder="title" {...field} />
+                          <Input
+                            required
+                            placeholder="title"
+                            disabled={isLoading}
+                            {...field}
+                          />
                         </FormControl>
 
                         <FormMessage />
@@ -165,6 +171,7 @@ export default function AddPost() {
                             required
                             placeholder="description"
                             {...field}
+                            disabled={isLoading}
                           />
                         </FormControl>
 

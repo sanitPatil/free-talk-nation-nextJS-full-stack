@@ -5,7 +5,10 @@ import { decrypt } from "@/utils/EncDenc.utils";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function DELETE(request: NextRequest, context): Promise<any> {
+export async function DELETE(
+  request: NextRequest,
+  context: { params: { tweetId: string } }
+): Promise<any> {
   const token = await getToken({ req: request });
   if (!token)
     return NextResponse.json(
@@ -16,9 +19,9 @@ export async function DELETE(request: NextRequest, context): Promise<any> {
   const params = await context.params;
 
   const owner = token._id;
-  const { postId } = params;
+  const { tweetId } = params;
 
-  if (!postId)
+  if (!tweetId)
     return NextResponse.json(
       { success: false, message: "post id required!!!" },
       { status: 400 }
@@ -28,7 +31,7 @@ export async function DELETE(request: NextRequest, context): Promise<any> {
 
   try {
     const post_owner = await postModel.findOne({
-      $and: [{ _id: postId }, { owner }],
+      $and: [{ _id: tweetId }, { owner }],
     });
 
     if (!post_owner)

@@ -29,25 +29,25 @@ function page() {
   const { status } = useSession();
   if (status === "authenticated") {
     return (
-      <div className=" h-screen ">
-        <div className="flex  ">
-          <div className="w-1/2 h-screen bg-black/80 flex-auto ...">
+      <>
+        <div className="grid grid-cols-6 ">
+          <div className="col-span-4 h-screen">
             <div className=" m-4">
               <PostList />
             </div>
           </div>
-          <div className="w-40  flex-auto  bg-gray-800 ">
+          <div className="col-span-2 p-1 border-l-2 ">
             <div className="m-4">
-              <div className="border flex rounded-full bg-black border-black focus:border-black">
+              <div className="border flex rounded-full border-black">
                 <Input
                   placeholder="Search user..."
-                  className="w-full pr-12 bg-transparent border bg-black border-black focus:ring-blue-500 rounded-full shadow-sm placeholder-gray-300 text-white"
+                  className="w-full pr-12 bg-transparent border bg-gray-100 border-black focus:ring-blue-500 rounded-full shadow-sm placeholder-gray-300 text-black"
                 />
                 <Button className="rounded-full">
-                  <Search className="" />
+                  <Search className="bg-black text-white" />
                 </Button>
               </div>
-              <div className="flex flex-col   justify-between">
+              <div className="text-center mt-4">
                 <SearchBar />
               </div>
             </div>
@@ -56,7 +56,7 @@ function page() {
             </div>
           </div>
         </div>
-      </div>
+      </>
     );
 
     // if user is not login
