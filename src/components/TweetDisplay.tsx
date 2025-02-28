@@ -137,7 +137,6 @@ function TweetDisplay({ tweet }) {
           variant: "destructive",
         });
       }
-      router.refresh();
     } catch (error) {
       toast({
         title: "updation failed!!!",
@@ -147,6 +146,7 @@ function TweetDisplay({ tweet }) {
     } finally {
       setupdateLoading(false);
     }
+    router.replace(`/`);
   };
 
   let fileExtension = null;

@@ -47,8 +47,8 @@ export const uploadFile = async (
 // file removal -----
 // todo
 
-export const removeFile = async (publicId) => {
-  const resource_type = publicId.split("/")[1];
+export const removeFile = async (publicId: string) => {
+  const resource_type = `${publicId.split("/")[1]}`;
   try {
     const result = await cloudinary.v2.uploader.destroy(publicId, {
       resource_type,
