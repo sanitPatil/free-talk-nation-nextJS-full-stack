@@ -29,7 +29,7 @@ export async function POST(request: Request): Promise<any> {
     const owner = new mongoose.Types.ObjectId(token._id);
 
     let fileResponse = undefined;
-    let decryptPublicId = undefined;
+    let encryptedPublicId = undefined;
     if (file) {
       if (!(file instanceof Blob))
         return NextResponse.json(
@@ -41,12 +41,13 @@ export async function POST(request: Request): Promise<any> {
             status: 400,
           }
         );
+
       const arrayBuffer = await file.arrayBuffer();
       const buffer = Buffer.from(arrayBuffer);
 
       fileResponse = await uploadFile(buffer, file);
 
-      decryptPublicId = encrypt(fileResponse.public_id);
+      encryptedPublicId = encrypt(fileResponse.public_id);
     }
 
     const savePost = await postModel.create({
@@ -54,7 +55,7 @@ export async function POST(request: Request): Promise<any> {
       title,
       description,
       file: fileResponse ? fileResponse.secure_url : "",
-      file_public_id: fileResponse ? decryptPublicId : "",
+      file_public_id: fileResponse ? encryptedPublicId : "",
     });
 
     if (!savePost)

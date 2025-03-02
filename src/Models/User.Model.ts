@@ -6,8 +6,11 @@ export interface User extends Document {
   email: string;
   password: string;
   bio?: string;
-  profileImage?: string;
+  avatar?: string;
+  avatarPublicId?: string;
+
   coverImage?: string;
+  coverImagePublicId?: string;
   validatePassword: (password: string) => boolean;
 }
 
@@ -40,11 +43,19 @@ const UserSchema: Schema<User> = new Schema(
       type: String,
       default: "",
     },
-    profileImage: {
+    avatar: {
+      type: String,
+      default: "",
+    },
+    avatarPublicId: {
       type: String,
       default: "",
     },
     coverImage: {
+      type: String,
+      default: "",
+    },
+    coverImagePublicId: {
       type: String,
       default: "",
     },

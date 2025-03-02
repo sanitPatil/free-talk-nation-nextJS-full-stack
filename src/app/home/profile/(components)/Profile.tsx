@@ -1,58 +1,56 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { Label } from "@radix-ui/react-label";
-import { Edit, Edit2 } from "lucide-react";
-import Image from "next/image";
+import { Edit, User, X } from "lucide-react";
 import React, { useState } from "react";
-import UpdateCoverImage from "./UpdateCover";
-import UpdateAvatar from "./UpdateAvatar";
-import UpdateUsername from "./UpdateUsername";
-import UpdateEmail from "./UpdateEmail";
 
-function Profile() {
-  const [imageSrc, setImageSrc] = useState("/avatar-placeholder.png");
+import { UpdateModal } from "./UpdateModal";
+import Image from "next/image";
+import { Label } from "@/components/ui/label";
+
+function Profile({ user }) {
+  console.log(user);
+
   return (
-    <div className="px-8 py-4 w-full h-full">
-      <div className="mx-4 w-full flex-row gap-8 space-y-12 ">
-        {/* cover image */}
-        <div className="w-full flex h-32 border rounded-lg border-blue-900">
-          <div className="w-full ">
-            <div className="w-full h-full  rounded-sm flex items-center justify-center">
-              Profile Image
-            </div>
+    <div className="grid-flow-col  mt-4 m-2 p-1 w-full h-full ">
+      <div className="relative text-center w-full shadow-md hover:border-blue-800 border-blue-600 border-dashed border h-40 rounded-xl mt-2 ">
+        {user?.coverImage && (
+          <div className=" flex justify-center items-center h-40">
+            <Image
+              src={user?.coverImage}
+              width={500}
+              height={500}
+              alt="profile image "
+              className="w-full h-36 p-1 rounded-lg"
+            />
           </div>
-          <div className="relative bottom-0 m-4">
-            <UpdateCoverImage />
-          </div>{" "}
+        )}
+
+        <span className="absolute bottom-2 right-4 p-1">
+          <UpdateModal tag="profile" />
+        </span>
+      </div>
+      <div className=" w-full p-4 flex flex-col items-center justify-center">
+        <div className="relative w-full flex justify-center ">
+          {user?.avatar ? (
+            <Image
+              src={user?.avatar}
+              width={400}
+              height={300}
+              alt="profile image "
+              priority={true}
+              className="rounded-full w-40 h-40"
+            />
+          ) : (
+            <User className="w-40 h-40 border  rounded-full" />
+          )}
+          <UpdateModal tag="avatar" />
         </div>
-        {/* profile image  */}
-        <div className="mt-4 w-full  px-4 py-4 text-center flex justify-center">
-          <div className="w-40 h-40 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 p-1">
-            <div className="w-full h-full bg-gray-900 rounded-full flex items-center justify-center overflow-hidden shadow-lg">
-              {imageSrc ? (
-                <Image
-                  src={imageSrc}
-                  alt="Avatar"
-                  width={80}
-                  height={80}
-                  className="w-full h-full object-cover rounded-full hover:scale-105 transition-transform duration-300"
-                />
-              ) : (
-                <span className="text-white text-xl font-bold">JD</span> // Initials fallback
-              )}
-            </div>
-          </div>
-          <UpdateAvatar />
+        <div className="mt-4 items-center justify-center w-full text-xl font-bold flex gap-4">
+          <h1>{user?.username}</h1>
+          <UpdateModal tag="username" />
         </div>
-        <div className="flex justify-center gap-4 text-center text-xl  font-bold ">
-          <div className=" flex justify-center gap-2">
-            <Label>Username</Label>
-            <UpdateUsername />
-          </div>
-          <div className=" flex justify-center gap-7">
-            <Label>email</Label>
-            <UpdateEmail />
-          </div>
+        <div className="mt-4 items-center justify-center w-full text-xl font-bold flex gap-4">
+          <h1>Bio: {user?.bio ? user?.bio : "Free-talk user..."}</h1>
+          <UpdateModal tag="bio" />
         </div>
       </div>
     </div>
