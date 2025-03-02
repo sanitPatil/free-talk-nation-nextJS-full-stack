@@ -29,7 +29,6 @@ function page() {
     };
     if (tweetId) getTweet();
   }, [tweetId]);
-  console.log(tweet);
 
   return (
     <div className="">

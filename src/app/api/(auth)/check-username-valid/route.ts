@@ -6,16 +6,14 @@ export async function GET(request: Request): Promise<any> {
   await DbConnect();
   try {
     const { searchParams } = new URL(request.url);
-    // console.log(searchParams);
+
     const querySearch = {
       username: searchParams.get("username"),
     };
-    // console.log(querySearch);
 
     const strictCheckUsername = UsernameSchemaValidation.safeParse(
       querySearch.username
     );
-    // console.log(strictCheckUsername.error?.format()._errors.toString());
 
     if (!strictCheckUsername.success) {
       return Response.json(

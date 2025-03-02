@@ -39,19 +39,17 @@ function SignUpComponent() {
       password: "",
     },
   });
-  
 
   const signUpHandler = async (data: z.infer<typeof SignUpSchema>) => {
     setIsLoading(true);
     setsignUpError("");
     try {
       const signUpResponse = await axios.post("/api/sign-up", data);
-      // console.log(`done1`);
 
       if (signUpResponse.data.error) {
         setsignUpError(`${signUpResponse.data.error.messgae}`);
       }
-      console.log(signUpResponse);
+
       toast({
         title: "user successfully Register",
         description:
@@ -91,7 +89,6 @@ function SignUpComponent() {
       checkUsernameValid();
     }
   }, [username]);
-  // console.log(username);
 
   return (
     <div className="py-4 ">

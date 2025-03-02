@@ -7,8 +7,6 @@ import Image from "next/image";
 import { Label } from "@/components/ui/label";
 
 function Profile({ user }) {
-  console.log(user);
-
   return (
     <div className="grid-flow-col  mt-4 m-2 p-1 w-full h-full ">
       <div className="relative text-center w-full shadow-md hover:border-blue-800 border-blue-600 border-dashed border h-40 rounded-xl mt-2 ">

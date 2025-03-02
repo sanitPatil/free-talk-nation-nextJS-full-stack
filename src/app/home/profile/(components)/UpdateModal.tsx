@@ -530,7 +530,6 @@ export const BioUpdate = () => {
   });
 
   const handlePasswordUpdate = async (data) => {
-    // console.log(data);
     setLoading(true);
     if (!data.bio) {
       toast({
@@ -620,7 +619,6 @@ export const EmailUpdate = () => {
   });
 
   const handleEmailUpdate = async (data) => {
-    console.log(data);
     setLoading(true);
     if (!data.email || !data.password) {
       toast({
@@ -731,7 +729,6 @@ export const PasswordUpdate = () => {
   });
 
   const handlePasswordUpdate = async (data) => {
-    // console.log(data);
     setLoading(true);
     if (!data.old_password || !data.new_password) {
       toast({
@@ -830,4 +827,3 @@ export const PasswordUpdate = () => {
     </div>
   );
 };
-// setting -> email  and password update TODO

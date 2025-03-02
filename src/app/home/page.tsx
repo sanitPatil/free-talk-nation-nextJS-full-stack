@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
 import axios from "axios";
 
-import { Loader2, Search, SearchCheckIcon } from "lucide-react";
+import { Loader2, Search, SearchCheckIcon, X } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -67,7 +67,6 @@ function page() {
       searchUser();
     }
   }, [username]);
-  console.log(userlist);
 
   const [caption, setCaption] = useState(captions[0]);
 
@@ -96,6 +95,14 @@ function page() {
                   placeholder="username"
                   onChange={(e) => {
                     debounced(e.target.value);
+                  }}
+                />
+                <X
+                  className={` ${
+                    userlist.length > 0 ? "block" : "hidden"
+                  } absolute top-0.5  border-none p-1 w-10 h-10 right-0 border`}
+                  onClick={() => {
+                    setUserList([]);
                   }}
                 />
               </div>

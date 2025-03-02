@@ -5,7 +5,6 @@ export async function POST(Request: Request): Promise<any> {
   await DbConnect();
   try {
     const { username, email, password } = await Request.json();
-    // console.log(username, email, password);
 
     const checkUserExists = await userModel.findOne({
       $or: [{ email }, { username }],
@@ -45,7 +44,6 @@ export async function POST(Request: Request): Promise<any> {
       },
       { status: 200 }
     );
-    
   } catch (error) {
     console.error(`Signup error: ${error}`);
     return Response.json(
