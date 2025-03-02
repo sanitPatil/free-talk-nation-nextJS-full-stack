@@ -53,6 +53,21 @@ function Profile({ user }) {
           <UpdateModal tag="bio" />
         </div>
       </div>
+      <div className="flex flex-col container justify-center border-t-2 mt-2 border-black items-center">
+        <h1 className="text-4xl font-bold m-2 text-blue-700">Settings</h1>
+        <div className="grid grid-cols-2 w-full text-center text-3xl">
+          <div className="flex items-center justify-center gap-4 font-bold">
+            Email
+            <UpdateModal tag="email" />
+          </div>
+          <div>
+            <div className="flex items-center justify-center gap-4 font-bold">
+              Password
+              <UpdateModal tag="password" />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

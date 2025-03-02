@@ -15,7 +15,6 @@ function Nav1() {
     { title: "Home", icon: <Home />, link: "/home" },
     { title: "Profile", icon: <User />, link: "/home/profile" },
     { title: "DashBoard", icon: <LayoutDashboard />, link: "/home/dashboard" },
-    { title: "Settings", icon: <Settings2 />, link: "/home/settings" },
 
     // { title: "About", icon: <Info />, link: "/home/about" },
   ];

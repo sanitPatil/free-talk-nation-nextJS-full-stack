@@ -55,9 +55,9 @@ export function UpdateModal({ tag }: { tag: string }) {
 
         {tag && tag === "bio" && <BioUpdate />}
         {/* email image */}
-        {/* {tag && tag === "email" && <EmailUpdate />} */}
+        {tag && tag === "email" && <EmailUpdate />}
         {/* password image */}
-        {/* {tag && tag === "password" && <PasswordUpdate />} */}
+        {tag && tag === "password" && <PasswordUpdate />}
       </DialogContent>
     </Dialog>
   );
@@ -529,7 +529,7 @@ export const BioUpdate = () => {
     },
   });
 
-  const handleBioUpdate = async (data) => {
+  const handlePasswordUpdate = async (data) => {
     // console.log(data);
     setLoading(true);
     if (!data.bio) {
@@ -569,7 +569,7 @@ export const BioUpdate = () => {
   return (
     <div>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleBioUpdate)}>
+        <form onSubmit={form.handleSubmit(handlePasswordUpdate)}>
           <FormField
             control={form.control}
             name="bio"
@@ -609,4 +609,225 @@ export const BioUpdate = () => {
   );
 };
 
+export const EmailUpdate = () => {
+  const [loading, setLoading] = useState(false);
+
+  const form = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const handleEmailUpdate = async (data) => {
+    console.log(data);
+    setLoading(true);
+    if (!data.email || !data.password) {
+      toast({
+        title: "Error-Email",
+        description: "Email and Password field cannot be empty!!!",
+        variant: "destructive",
+      });
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await axios.patch("/api/edit-email", data);
+      if (response.status === 200) {
+        toast({
+          title: "Email updated",
+          description: "Email updated successfully!!!",
+        });
+      } else {
+        toast({
+          title: "failed to update Email",
+          description: response.data.message || "Email updation failed!!!",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error-Email",
+        description: "failed to update Email,try again!!!",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+  return (
+    <div>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(handleEmailUpdate)}>
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>New Email</FormLabel>
+                <FormControl>
+                  <Input
+                    required
+                    type="email"
+                    placeholder="Email"
+                    disabled={loading}
+                    {...field}
+                  />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input
+                    required
+                    type="password"
+                    placeholder="password"
+                    disabled={loading}
+                    {...field}
+                  />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className=" mt-2 flex justify-center gap-12">
+            <DialogClose asChild>
+              <Button type="button" variant="secondary" disabled={loading}>
+                Close
+              </Button>
+            </DialogClose>
+            <Button type="submit" className="w-24">
+              {loading ? (
+                <Loader2 className="w-full animate-spin" />
+              ) : (
+                "Save changes"
+              )}
+            </Button>
+          </div>
+        </form>
+      </Form>
+    </div>
+  );
+};
+
+export const PasswordUpdate = () => {
+  const [loading, setLoading] = useState(false);
+
+  const form = useForm({
+    defaultValues: {
+      old_password: "",
+      new_password: "",
+    },
+  });
+
+  const handlePasswordUpdate = async (data) => {
+    // console.log(data);
+    setLoading(true);
+    if (!data.old_password || !data.new_password) {
+      toast({
+        title: "Error-password-update",
+        description: "password field cannot be empty!!!",
+        variant: "destructive",
+      });
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await axios.patch("/api/edit-password", data);
+      if (response.status === 200) {
+        toast({
+          title: "password updated",
+          description: "password updated successfully!!!",
+        });
+      } else {
+        toast({
+          title: "failed to update password",
+          description: response.data.message || "password updation failed!!!",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error-password",
+        description: "failed to update password,try again!!!",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+  return (
+    <div>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(handlePasswordUpdate)}>
+          <FormField
+            control={form.control}
+            name="old_password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>old password</FormLabel>
+                <FormControl>
+                  <Input
+                    required
+                    type="password"
+                    placeholder="password"
+                    disabled={loading}
+                    {...field}
+                  />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="new_password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>new password</FormLabel>
+                <FormControl>
+                  <Input
+                    required
+                    type="password"
+                    placeholder="password"
+                    disabled={loading}
+                    {...field}
+                  />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className=" mt-2 flex justify-center gap-12">
+            <DialogClose asChild>
+              <Button type="button" variant="secondary" disabled={loading}>
+                Close
+              </Button>
+            </DialogClose>
+            <Button type="submit" className="w-24">
+              {loading ? (
+                <Loader2 className="w-full animate-spin" />
+              ) : (
+                "Save changes"
+              )}
+            </Button>
+          </div>
+        </form>
+      </Form>
+    </div>
+  );
+};
 // setting -> email  and password update TODO

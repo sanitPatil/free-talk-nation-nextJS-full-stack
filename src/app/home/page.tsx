@@ -1,13 +1,27 @@
 "use client";
 import AddPost from "@/components/AddPost";
-import Nav1 from "@/components/Nav1";
+
 import PostList from "@/components/PostList";
 import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import SearchBar from "@/components/UserList";
-import { Search } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
+import axios from "axios";
+
+import { Loader2, Search, SearchCheckIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
-import React, { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useDebounceCallback } from "usehooks-ts";
 
 // if user not login
 const captions = [
@@ -19,6 +33,42 @@ const captions = [
   "Raw and real. 🔥",
 ];
 function page() {
+  const [username, setUsername] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [userlist, setUserList] = useState([]);
+  const debounced = useDebounceCallback(setUsername, 400);
+
+  useEffect(() => {
+    const searchUser = async () => {
+      setIsLoading(true);
+      try {
+        const response = await axios.get(
+          `/api/search-user?username=${username}`
+        );
+        if (response.status === 200) {
+          setUserList(response.data.users);
+        } else {
+          toast({
+            title: "failed to get user search",
+            description: response.data.message || "failed to get user",
+          });
+        }
+      } catch (error) {
+        toast({
+          title: "Error user search",
+          description: "failed to get user",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    if (username) {
+      searchUser();
+    }
+  }, [username]);
+  console.log(userlist);
+
   const [caption, setCaption] = useState(captions[0]);
 
   const changeCaption = () => {
@@ -38,18 +88,34 @@ function page() {
           </div>
           <div className="col-span-2 p-1 border-l-2 ">
             <div className="m-4">
-              <div className="border flex rounded-full border-black">
+              <div className="p-1 relative">
                 <Input
-                  placeholder="Search user..."
-                  className="w-full pr-12 bg-transparent border bg-gray-100 border-black focus:ring-blue-500 rounded-full shadow-sm placeholder-gray-300 text-black"
+                  className="border-none bg-gray-800"
+                  type="text"
+                  disabled={isLoading}
+                  placeholder="username"
+                  onChange={(e) => {
+                    debounced(e.target.value);
+                  }}
                 />
-                <Button className="rounded-full">
-                  <Search className="bg-black text-white" />
-                </Button>
               </div>
-              <div className="text-center mt-4">
-                <SearchBar />
-              </div>
+            </div>
+            <div className="jusitfy-center w-full">
+              {userlist.length > 0 &&
+                userlist.map((user) => (
+                  <Link href={`/home/${user._id}`} key={user._id}>
+                    <div className=" flex gap-4 items-center justify-center hover:bg-gray-800 p-1">
+                      <Image
+                        src={user?.avatar}
+                        width={40}
+                        height={40}
+                        alt="avatar"
+                        className="w-12 h-12 border rounded-full"
+                      />
+                      <span className="">{user.username}</span>
+                    </div>
+                  </Link>
+                ))}
             </div>
             <div className="absolute bottom-4 right-32">
               <AddPost />

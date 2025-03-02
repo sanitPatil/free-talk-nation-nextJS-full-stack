@@ -1,9 +1,8 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDebounceCallback } from "usehooks-ts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { signInSchema } from "@/Schemas/signInSchema";
 import * as z from "zod";
 import {
   Form,
@@ -16,7 +15,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { SignUpSchema } from "@/Schemas/signUpSchema";
@@ -26,7 +24,6 @@ import axios, { AxiosError } from "axios";
 function SignUpComponent() {
   const router = useRouter();
   const { toast } = useToast();
-
   const [isLoading, setIsLoading] = useState(false);
   const [signUpError, setsignUpError] = useState("");
 
@@ -42,12 +39,9 @@ function SignUpComponent() {
       password: "",
     },
   });
-  // console.log("username", username);
+  
 
   const signUpHandler = async (data: z.infer<typeof SignUpSchema>) => {
-    // setIsLoading(true);
-    // console.log(data);
-    // setIsLoading(false);
     setIsLoading(true);
     setsignUpError("");
     try {
