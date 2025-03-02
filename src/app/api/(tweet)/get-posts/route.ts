@@ -25,7 +25,8 @@ export async function GET(request: Request): Promise<any> {
           onwer: 1,
           "ownerDetails._id": 1,
           "ownerDetails.username": 1,
-          "ownerDetails.profileImage": 1,
+          "ownerDetails.coverImage": 1,
+          "ownerDetails.avatar": 1,
         },
       },
       {

@@ -73,7 +73,6 @@ UserSchema.pre<User>(
       this.password = await bcrypt.hash(this.password, 10);
       next();
     } catch (error: any) {
-      console.log("error 61: ", error);
       next(error);
     }
   }

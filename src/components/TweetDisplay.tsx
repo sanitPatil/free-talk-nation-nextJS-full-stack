@@ -158,12 +158,22 @@ function TweetDisplay({ tweet }) {
           <Card className="p-4 border-none shadow-none  bg-transparent text-white transition">
             <div className="flex space-x-4">
               {/* Profile Image */}
-              <Avatar className="w-12 h-12">
-                <AvatarImage
-                  src="https://randomuser.me/api/portraits/men/75.jpg"
-                  alt="User"
+              {tweet.ownerDetails.avatar ? (
+                <Image
+                  width={40}
+                  height={40}
+                  alt="avatar"
+                  src={tweet.ownerDetails.avatar}
+                  className="w-14 h-14 rounded-full"
                 />
-              </Avatar>
+              ) : (
+                <Avatar className="w-12 h-12">
+                  <AvatarImage
+                    src="https://randomuser.me/api/portraits/men/75.jpg"
+                    alt="User"
+                  />
+                </Avatar>
+              )}
 
               {/* Tweet Content */}
               <div className="flex-1">

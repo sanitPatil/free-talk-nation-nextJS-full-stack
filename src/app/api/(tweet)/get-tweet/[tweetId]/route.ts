@@ -45,11 +45,11 @@ export async function GET(
           onwer: 1,
           "ownerDetails._id": 1,
           "ownerDetails.username": 1,
-          "ownerDetails.profileImage": 1,
+          "ownerDetails.coverImage": 1,
+          "ownerDetails.avatar": 1,
         },
       },
     ]);
-    // console.log(tweet);
 
     if (!tweet)
       return NextResponse.json(
